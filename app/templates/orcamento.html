@@ -80,10 +80,11 @@ content %}
         <td class="d-flex gap-1">
         </form>
         
-        <button type="button"
-        class="btn btn-sm btn-primary"
-        data-bs-toggle="modal"
-        data-bs-target="#editarProduto">Editar</button>
+        <button 
+        type="button" class="btn btn-sm btn-primary"
+        data-bs-toggle="modal" data-bs-target="#editarProdutoModal"
+         onclick="editProduto('{{ item._id }}', '{{ item.nome }}',
+        '{{ item.quantidade }}', '{{ item.preco_unitario }}')">Editar</button>
       </form>
       
       {% include 'modals/modal_editar_produto.html' %}
@@ -102,5 +103,14 @@ content %}
 </div>
 </div>
 
+<script>
+  function editProduto(id, nome, quantidade, preco_unitario) {
+    document.getElementById('produto_id').value = id;
+    document.getElementById('nome').value = nome;
+    document.getElementById('quantidade').value = quantidade;
+    document.getElementById('preco_unitario').value = preco_unitario;
+    document.getElementById('editarProdutoForm').action = `/orcamento/{{ orcamento._id }}/produto/${id}/editar/`;
+  }
+</script>
 
 {% include 'modals/modal_novo_produto.html' %}  {% endblock %}

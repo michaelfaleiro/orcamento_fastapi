@@ -81,8 +81,8 @@ def gerar_pdf(orcamento):
         # Preenchendo as células com o conteúdo
         pdf.drawString(55, y + 5, str(produto["quantidade"]))
         pdf.drawString(125, y + 5, produto["nome"].upper())
-        pdf.drawString(403, y + 5, f"R${produto['preco_unitario']:.2f}")
-        pdf.drawString(503, y + 5, f"R${total_produto:.2f}")
+        pdf.drawString(397, y + 5, f"R$ {produto['preco_unitario']:.2f}")
+        pdf.drawString(497, y + 5, f"R$ {total_produto:.2f}")
         
         # Linha de separação entre os produtos
         y -= 20  # Pula uma linha para o próximo produto
@@ -91,7 +91,7 @@ def gerar_pdf(orcamento):
     # Linha de fechamento da tabela com o total
     y -= 20  # Espaço após a última linha do produto
     pdf.setFont("Helvetica-Bold", 12)
-    pdf.drawString(455, y, f"Total: R${total_geral:.2f}")
+    pdf.drawString(455, y, f"Total: R$ {total_geral:.2f}")
 
     # Linha observações
     pdf.setFont("Helvetica-Bold", 10)

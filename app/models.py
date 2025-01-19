@@ -7,7 +7,7 @@ class Produto(BaseModel):
     _id: str
     nome: str 
     quantidade: int 
-    preco_unitario: float 
+    preco_unitario: str 
 
 class Orcamento(BaseModel):
     _id: str

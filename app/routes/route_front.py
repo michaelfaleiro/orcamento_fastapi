@@ -63,16 +63,16 @@ async def create_orcamento(request: Request, veiculo: str = Form(...), placa: st
                            
 # Adicionar Produto
 @router.post("/orcamento/{id}/produto/novo", response_class=HTMLResponse)
-async def add_produto(id: str, nome: str = Form(...), quantidade: int = Form(...), preco_unitario: float = Form(...)):
+async def add_produto(id: str, nome: str = Form(...), quantidade: int = Form(...), preco_unitario: str = Form(...)):
     orcamento = await db["orcamentos"].find_one({"_id": ObjectId(id)})
     if not orcamento:
         raise HTTPException(status_code=404, detail="Orçamento não encontrado")
-    
+            
     orcamento["produtos"].append({
         "_id": ObjectId(),
         "nome": nome,
         "quantidade": quantidade,
-        "preco_unitario": preco_unitario
+        "preco_unitario": float(preco_unitario.replace(",", "."))
     })
     await db["orcamentos"].update_one({"_id": ObjectId(id)}, {"$set": orcamento})
     return RedirectResponse(url=f"/orcamento/{id}/", status_code=303)
@@ -91,7 +91,7 @@ async def remove_produto(id: str, produto_id: str):
 
 # Editar Produto
 @router.post("/orcamento/{id}/produto/{produto_id}/editar/", response_class=HTMLResponse)
-async def edit_produto(id: str, produto_id: str, nome: str = Form(...), quantidade: int = Form(...), preco_unitario: float = Form(...)):
+async def edit_produto(id: str, produto_id: str, nome: str = Form(...), quantidade: int = Form(...), preco_unitario: str = Form(...)):
     orcamento = await db["orcamentos"].find_one({"_id": ObjectId(id)})
     if not orcamento:
         raise HTTPException(status_code=404, detail="Orçamento não encontrado")
@@ -100,7 +100,7 @@ async def edit_produto(id: str, produto_id: str, nome: str = Form(...), quantida
         if produto["_id"] == ObjectId(produto_id):
             produto["nome"] = nome
             produto["quantidade"] = quantidade
-            produto["preco_unitario"] = preco_unitario
+            produto["preco_unitario"] = float(preco_unitario.replace(",", "."))
             break
     
     await db["orcamentos"].update_one({"_id": ObjectId(id)}, {"$set": orcamento})

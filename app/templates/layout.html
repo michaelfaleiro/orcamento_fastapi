@@ -17,7 +17,7 @@
   </head>
   <body>
     <div
-    class="container vh-100 d-flex gap-2 flex-column bg-secondary-subtle h-100 border rounded-2"
+    class="container vh-100 d-flex gap-2 flex-column bg-secondary-subtle  border rounded-2"
     >
       {% if error %}
       <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -27,18 +27,20 @@
       {% endif %}
       <header class="mt-2">{% include 'partials/navbar.html' %}</header>
 
-      <main class="flex-grow-1 w-100 h-100 overflow-auto">
+      <main class="flex-grow-1 w-100 h-100 overflow-auto bg-secondary-subtle shadow-lg border rounded-2">
         {% block content %}
         <!-- O conteúdo específico de cada página será inserido aqui -->
         {% endblock %}
       </main>
-      <footer class="w-100 mb-2">{% include 'partials/footer.html' %}</div>
+      <footer class="w-100">{% include 'partials/footer.html' %}</div>
     </div>
-   ≈
+   
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/cleave.min.js"></script>
+    
   </body>
 </html>
