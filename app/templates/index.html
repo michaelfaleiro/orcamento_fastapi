@@ -1,0 +1,100 @@
+{% extends 'layout.html' %} {% block title %} Listar Orçamentos {% endblock %}
+{% block content %}
+
+<div class="h-100 border border rounded-2 shadow-lg">
+  <div
+    class=" d-flex gap-1 flex-column h-100  align-items-center"
+  >
+    <h4>Lista de Orçamentos</h1>
+
+    <div>
+      <form action="/?placa={{placa}}" method="get">
+        <div class="input-group mb-3">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Buscar por placa"
+            name="placa"
+            value="{{ filtro }}"
+          />
+          <div class="d-flex mx-1 gap-1 justify-content-center align-items-center">
+            <button class="btn btn-sm btn-primary" type="submit">Buscar</button>
+            <a class="btn btn-sm btn-danger mx-auto" href="/">Limpar</a>
+          </div>
+        </div>
+      </form>
+      {%if filtro %}
+        <p>Mostrando resultados da busca por : <span>{{filtro}}</span></p>
+      {%endif%}
+    </div>
+
+    
+
+    <div class="w-75 overflow-auto p-2">
+      <div class="my-2">
+        <button
+          type="button"
+          class="btn btn-sm btn-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#novoOrcamento"
+        >
+          Novo Orçamento
+        </button>
+      </div>
+      <table class="table table-sm table-striped">
+        <thead>
+          <tr>
+            <th class="col-4">Veiculo</th>
+            <th class="col">Placa</th>
+            <th class="col">Aberto em</th>
+            <th class="col">Status</th>
+            <th class="col">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for orcamento in orcamentos %}
+          <tr>
+            <td>{{ orcamento.veiculo.upper() }}</td>
+            <td>{{ orcamento.placa.upper() }}</td>
+            <td>{{ orcamento.data_criacao }}</td>
+            <td>{{ orcamento.status.upper() }}</td>
+            <td>
+              <form id="pdfForm{{ orcamento._id }}" action="/orcamentos/{{ orcamento._id }}/pdf" method="post" target="_blank" style="display: none;">
+                <input type="hidden" name="veiculo" value="{{ orcamento.veiculo }}" />
+                <input type="hidden" name="placa" value="{{ orcamento.placa }}" />
+                {% if orcamento.produtos %}
+                  {% for produto in orcamento.produtos %}
+                    <input type="hidden" name="produtos_nome" value="{{ produto.nome }}" />
+                    <input type="hidden" name="produtos_quantidade" value="{{ produto.quantidade }}" />
+                    <input type="hidden" name="produtos_preco_unitario" value="{{ produto.preco_unitario }}" />
+                  {% endfor %}
+                {% else %}
+                  <!-- Lista manual de produtos caso orcamento.produtos esteja vazio -->
+                  <input type="hidden" name="produtos_nome" value="Não há produtos" />
+                  <input type="hidden" name="produtos_quantidade" value="0" />
+                  <input type="hidden" name="produtos_preco_unitario" value="0.00" />
+                {% endif %}
+              </form>
+              <a
+                href="#"
+                class="btn btn-sm btn-success"
+                onclick="document.getElementById('pdfForm{{ orcamento._id }}').submit();"
+                ><i class="bi bi-file-earmark-pdf-fill"></i>
+                Gerar Pdf</a
+              >
+              <a
+                class="btn btn-sm btn-primary"
+                href="/orcamento/{{ orcamento._id }}/"
+                >Detalhes</a
+              >
+              
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% include 'modals/modal_novo_orcamento.html' %} {% endblock %}

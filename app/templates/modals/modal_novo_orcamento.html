@@ -1,0 +1,50 @@
+<div
+  class="modal"
+  id="novoOrcamento"
+  tabindex="-1"
+  aria-labelledby="novoOrcamentoModal"
+  aria-hidden="false"
+  data-bs-backdrop="false"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="novoOrcamentoModal">Novo Orçamento</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form action="/orcamento/novo" method="post">
+          <div class="form-group">
+            <label for="veiculo">Veículo</label>
+            <input
+              type="text"
+              class="form-control"
+              id="veiculo"
+              name="veiculo"
+            />
+          </div>
+          <div class="form-group">
+            <label for="placa">Placa</label>
+            <input type="text" class="form-control" id="placa" name="placa" />
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="Submit" class="btn btn-primary">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

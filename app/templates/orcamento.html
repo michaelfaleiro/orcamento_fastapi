@@ -1,0 +1,106 @@
+{% extends 'layout.html' %} {% block title %} Orçamento {% endblock %} {% block
+content %}
+
+<div class="border shadow-lg h-100 d-flex flex-column gap-2">
+
+  <h4 class="text-center">Orcamento</h4>
+      
+  <div class="mx-1 rounded-2 border shadow-lg p-2 d-flex gap-2 justify-content-between">
+    <div>
+      <p>Veículo : <span>{{orcamento.veiculo.upper()}}</span></p>
+      <p>Placa : <span>{{orcamento.placa.upper()}}</span></p>
+    </div>
+    <div>
+      <p>Aberto em : <span>{{orcamento.data_criacao}}</span></p>
+      <form action="/orcamento/{{ orcamento._id }}/status" method="post" id="statusForm">
+        <label class="form-label" for="">Status</label>
+        <select class="form-select" name="status" id="status" onchange="document.getElementById('statusForm').submit()">
+          <option value="aberto" {% if orcamento.status == 'aberto' %}selected{% endif %}>Aberto</option>
+          <option value="aprovado" {% if orcamento.status == 'aprovado' %}selected{% endif %}>Aprovado</option>
+          <option value="reprovado" {% if orcamento.status == 'reprovado' %}selected{% endif %}>Não Aprovado</option>
+        </select>
+      </form>
+    </div>
+  </div>
+  <div class="p-2">
+    <h5 class="text-center">Itens</h5>
+    <div class="d-flex gap-2 my-2">
+      <a href="\" class="btn btn-sm btn-secondary">Voltar</a>
+      <button
+      type="button"
+      class="btn btn-sm btn-primary"
+      data-bs-toggle="modal"
+      data-bs-target="#novoProduto"
+      >
+      Novo Produto
+    </button>
+    
+    <form id="pdfForm{{ orcamento._id }}" action="/orcamentos/{{ orcamento._id }}/pdf" method="post" target="_blank" style="display: none;">
+      <input type="hidden" name="veiculo" value="{{ orcamento.veiculo }}" />
+      <input type="hidden" name="placa" value="{{ orcamento.placa }}" />
+      {% if orcamento.produtos %}
+        {% for produto in orcamento.produtos %}
+          <input type="hidden" name="produtos_nome" value="{{ produto.nome }}" />
+          <input type="hidden" name="produtos_quantidade" value="{{ produto.quantidade }}" />
+          <input type="hidden" name="produtos_preco_unitario" value="{{ produto.preco_unitario }}" />
+        {% endfor %}
+      {% else %}
+        <!-- Lista manual de produtos caso orcamento.produtos esteja vazio -->
+        <input type="hidden" name="produtos_nome" value="Não há produtos" />
+        <input type="hidden" name="produtos_quantidade" value="0" />
+        <input type="hidden" name="produtos_preco_unitario" value="0.00" />
+      {% endif %}
+    </form>
+    <a
+      href="#"
+      class="btn btn-sm btn-success"
+      onclick="document.getElementById('pdfForm{{ orcamento._id }}').submit();"
+      ><i class="bi bi-file-earmark-pdf-fill"></i>
+      Gerar Pdf</a>
+    
+        
+  </div>
+  <table class="table table-sm table-striped">
+    <thead>
+      <tr>
+        <th>Descrição</th>
+        <th>Quantidade</th>
+        <th>Valor Unitário</th>
+        <th>Valor Total</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in orcamento.produtos %}
+      <tr>
+        <td>{{(item.nome).upper()}}</td>
+        <td>{{item.quantidade}}</td>
+        <td>R${{ "{:.2f}".format(item.preco_unitario)}}</td>
+        <td>R${{ "{:.2f}".format(item.quantidade * item.preco_unitario)}}</td>
+        <td class="d-flex gap-1">
+        </form>
+        
+        <button type="button"
+        class="btn btn-sm btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#editarProduto">Editar</button>
+      </form>
+      
+      {% include 'modals/modal_editar_produto.html' %}
+      
+      <a href="/orcamento/{{orcamento._id}}/produto/{{item._id}}/remover/"
+      class="btn btn-sm btn-danger"
+      onclick="return confirm('Deseja realmente excluir este item?')"
+      >Excluir</a
+      >
+      
+    </td>
+  </tr>
+  {% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+
+
+{% include 'modals/modal_novo_produto.html' %}  {% endblock %}
