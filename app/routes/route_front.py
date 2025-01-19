@@ -40,7 +40,8 @@ async def home(request: Request, placa: str = Query(default=None)):
 async def orcamento(request: Request, id: str):
     orcamento = await db["orcamentos"].find_one({"_id": ObjectId(id)})
     convert_objectid(orcamento)
-    return templates.TemplateResponse("orcamento.html", {"request": request, "orcamento": orcamento})
+    total = sum([produto["quantidade"] * produto["preco_unitario"] for produto in orcamento["produtos"]])
+    return templates.TemplateResponse("orcamento.html", {"request": request, "orcamento": orcamento, "total": total})
 
 
 # Novo Orçamento

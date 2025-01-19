@@ -59,48 +59,56 @@ content %}
       Gerar Pdf</a>
     
         
-  </div>
-  <table class="table table-sm table-striped">
-    <thead>
-      <tr>
-        <th>Descrição</th>
-        <th>Quantidade</th>
-        <th>Valor Unitário</th>
-        <th>Valor Total</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for item in orcamento.produtos %}
-      <tr>
-        <td>{{(item.nome).upper()}}</td>
-        <td>{{item.quantidade}}</td>
-        <td>R${{ "{:.2f}".format(item.preco_unitario)}}</td>
-        <td>R${{ "{:.2f}".format(item.quantidade * item.preco_unitario)}}</td>
-        <td class="d-flex gap-1">
+    </div>
+  <div class="flex-grow-1">
+
+    <table class="table table-sm table-striped">
+      <thead>
+        <tr>
+          <th>Descrição</th>
+          <th>Quantidade</th>
+          <th>Valor Unitário</th>
+          <th>Valor Total</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in orcamento.produtos %}
+        <tr>
+          <td>{{(item.nome).upper()}}</td>
+          <td>{{item.quantidade}}</td>
+          <td>R${{ "{:.2f}".format(item.preco_unitario)}}</td>
+          <td>R${{ "{:.2f}".format(item.quantidade * item.preco_unitario)}}</td>
+          <td class="d-flex gap-1">
+          </form>
+          
+          <button 
+          type="button" class="btn btn-sm btn-primary"
+          data-bs-toggle="modal" data-bs-target="#editarProdutoModal"
+          onclick="editProduto('{{ item._id }}', '{{ item.nome }}',
+          '{{ item.quantidade }}', '{{ item.preco_unitario }}')">Editar</button>
         </form>
         
-        <button 
-        type="button" class="btn btn-sm btn-primary"
-        data-bs-toggle="modal" data-bs-target="#editarProdutoModal"
-         onclick="editProduto('{{ item._id }}', '{{ item.nome }}',
-        '{{ item.quantidade }}', '{{ item.preco_unitario }}')">Editar</button>
-      </form>
-      
-      {% include 'modals/modal_editar_produto.html' %}
-      
-      <a href="/orcamento/{{orcamento._id}}/produto/{{item._id}}/remover/"
-      class="btn btn-sm btn-danger"
-      onclick="return confirm('Deseja realmente excluir este item?')"
-      >Excluir</a
-      >
-      
-    </td>
-  </tr>
-  {% endfor %}
-</tbody>
+        {% include 'modals/modal_editar_produto.html' %}
+        
+        <a href="/orcamento/{{orcamento._id}}/produto/{{item._id}}/remover/"
+        class="btn btn-sm btn-danger"
+        onclick="return confirm('Deseja realmente excluir este item?')"
+        >Excluir</a
+        >
+        
+      </td>
+    </tr>
+    {% endfor %}
+    <tr>
+      <td colspan="3" class="text-end fw-bold">Total</td>
+      <td class="fw-bold">R$ {{ "{:.2f}".format(total)}}</td>
+      <td></td>
+    </tr>
+  </tbody>
 </table>
 </div>
+  </div>
 </div>
 
 <script>
