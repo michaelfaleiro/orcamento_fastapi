@@ -1,2 +1,2 @@
  #!/bin/bash
- uvicorn app.main:app --reload --port $PORT
+ uvicorn app.main:app --reload --port 8000
